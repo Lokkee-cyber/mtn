@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production Build outputs
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+
+# OS Files
+.DS_Store
+Thumbs.db
