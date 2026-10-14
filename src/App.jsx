@@ -6,6 +6,7 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  CircularProgress,
   Container,
   CssBaseline,
   Dialog,
@@ -23,6 +24,7 @@ import {
   ArrowForward,
   Bolt,
   CheckCircleOutlined,
+  Error,
   HomeOutlined,
   Replay,
   Wifi,
@@ -35,7 +37,7 @@ const mtnTheme = createTheme({
     background: { default: "#0A0A0A", paper: "#141414" },
     text: { primary: "#FFFFFF", secondary: "#B0B0B0" },
   },
-  shape: { borderRadius: 8 },
+  shape: { borderRadius: 16 },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     button: { textTransform: "none", fontWeight: 700 },
@@ -43,33 +45,39 @@ const mtnTheme = createTheme({
 });
 
 const rewards = [
-  { id: "data", title: "20GB Free Data", description: "High-speed 4G/5G data bundle valid for 30 days.", icon: <Wifi /> },
-  { id: "airtime", title: "₦5,000 Airtime", description: "Direct voice and SMS credit loaded to your line.", icon: <Bolt /> },
+  { id: "data", title: "40GB Free Data", description: "High-speed 4G/5G data bundle valid for 30 days.", icon: <Wifi /> },
+  { id: "airtime", title: "₦10,000 Airtime", description: "Direct voice and SMS credit loaded to your line.", icon: <Bolt /> },
 ];
 
 export default function MtnPromoApp() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
   const [selectedReward, setSelectedReward] = useState("data");
-  const [adOpen, setAdOpen] = useState(false);
-  const [seconds, setSeconds] = useState(5);
+  
+  // Processing / Loading states
+  const [loadingOpen, setLoadingOpen] = useState(false);
+  const [seconds, setSeconds] = useState(3);
+  const [outcome, setOutcome] = useState("success"); // "success" or "failed"
   const [error, setError] = useState("");
 
-  // Ad / Loading countdown handler
+  // Countdown and outcome simulation handler
   useEffect(() => {
-    if (!adOpen) return undefined;
+    if (!loadingOpen) return undefined;
 
     if (seconds === 0) {
       const timeout = window.setTimeout(() => {
-        setAdOpen(false);
-        setStep(4); // Success Page
-      }, 500);
+        setLoadingOpen(false);
+        // Randomly determine success or failure for demonstration (e.g. 80% success rate)
+        const isSuccess = Math.random() < 0.8;
+        setOutcome(isSuccess ? "success" : "failed");
+        setStep(4); // Result Page
+      }, 400);
       return () => window.clearTimeout(timeout);
     }
 
     const timer = window.setTimeout(() => setSeconds((prev) => prev - 1), 1000);
     return () => window.clearTimeout(timer);
-  }, [adOpen, seconds]);
+  }, [loadingOpen, seconds]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -82,21 +90,20 @@ export default function MtnPromoApp() {
       setError("Please fill in all required fields before continuing.");
       return;
     }
-    // TODO: Send or store user info with your backend here if needed
     setStep(3);
   };
 
-  const handleStartAds = () => {
-    setSeconds(5);
-    setAdOpen(true);
+  const handleProcessActivation = () => {
+    setSeconds(3);
+    setLoadingOpen(true);
   };
 
   const resetFlow = () => {
     setStep(1);
     setFormData({ name: "", email: "", phone: "" });
     setSelectedReward("data");
-    setAdOpen(false);
-    setSeconds(5);
+    setLoadingOpen(false);
+    setSeconds(3);
     setError("");
   };
 
@@ -115,7 +122,7 @@ export default function MtnPromoApp() {
                   width: 44,
                   height: 44,
                   flexShrink: 0,
-                  borderRadius: 1,
+                  borderRadius: 2,
                   bgcolor: "primary.main",
                   color: "primary.contrastText",
                   display: "grid",
@@ -126,6 +133,7 @@ export default function MtnPromoApp() {
               >
                 MTN
               </Box>
+              
               <Box>
                 <Typography variant="subtitle1" fontWeight={800} letterSpacing={0.5}>
                   MTN NETWORK PROVIDER
@@ -140,11 +148,11 @@ export default function MtnPromoApp() {
             <LinearProgress
               variant="determinate"
               value={progress}
-              sx={{ height: 6, borderRadius: 1, bgcolor: "#222222" }}
+              sx={{ height: 6, borderRadius: 5, bgcolor: "#222222" }}
             />
 
             {error && (
-              <Alert severity="error" sx={{ borderRadius: 1 }}>
+              <Alert severity="error" sx={{ borderRadius: 2 }}>
                 {error}
               </Alert>
             )}
@@ -156,7 +164,7 @@ export default function MtnPromoApp() {
                 sx={{
                   p: { xs: 3, sm: 5 },
                   border: "1px solid rgba(255, 204, 0, 0.2)",
-                  borderRadius: 2,
+                  borderRadius: 4,
                   background: "radial-gradient(circle at 90% 10%, rgba(255,204,0,.12), transparent 40%), #141414",
                 }}
               >
@@ -164,7 +172,7 @@ export default function MtnPromoApp() {
                   <Box
                     sx={{
                       p: 1.5,
-                      borderRadius: 1,
+                      borderRadius: 3,
                       bgcolor: "rgba(255, 204, 0, 0.1)",
                       color: "primary.main",
                       display: "inline-flex",
@@ -173,10 +181,10 @@ export default function MtnPromoApp() {
                     <Wifi sx={{ fontSize: 36 }} />
                   </Box>
                   <Typography variant="h4" fontWeight={900} sx={{ lineHeight: 1.2 }}>
-                    Claim Your 20GB Free Data & Airtime Reward
+                    Claim Your 40GB Free Data & Airtime Reward
                   </Typography>
                   <Typography color="text.secondary" sx={{ lineHeight: 1.7 }}>
-                    MTN is celebrating our loyal subscribers by giving out 20GB of free high-speed mobile data and voice airtime credits. Complete a quick verification process to claim your reward instantly.
+                    MTN is celebrating our loyal subscribers by giving out 40GB of free high-speed mobile data and voice airtime credits. Complete a quick verification process to claim your reward instantly.
                   </Typography>
                   <Button
                     fullWidth
@@ -192,13 +200,13 @@ export default function MtnPromoApp() {
               </Paper>
             )}
 
-            {/* PAGE 2: USER INFORMATION PLACEHOLDERS */}
+            {/* PAGE 2: USER INFORMATION */}
             {step === 2 && (
               <Paper
                 component="form"
                 onSubmit={handleStep2Submit}
                 elevation={0}
-                sx={{ p: { xs: 3, sm: 5 }, border: "1px solid rgba(255, 204, 0, 0.2)", borderRadius: 2 }}
+                sx={{ p: { xs: 3, sm: 5 }, border: "1px solid rgba(255, 204, 0, 0.2)", borderRadius: 4 }}
               >
                 <Stack spacing={3}>
                   <Box>
@@ -250,11 +258,11 @@ export default function MtnPromoApp() {
               </Paper>
             )}
 
-            {/* PAGE 3: REWARD SELECTION & ADS */}
+            {/* PAGE 3: REWARD SELECTION */}
             {step === 3 && (
               <Paper
                 elevation={0}
-                sx={{ p: { xs: 3, sm: 5 }, border: "1px solid rgba(255, 204, 0, 0.2)", borderRadius: 2 }}
+                sx={{ p: { xs: 3, sm: 5 }, border: "1px solid rgba(255, 204, 0, 0.2)", borderRadius: 4 }}
               >
                 <Stack spacing={3}>
                   <Box>
@@ -274,7 +282,7 @@ export default function MtnPromoApp() {
                         sx={{
                           borderColor: selectedReward === reward.id ? "primary.main" : "#303030",
                           bgcolor: selectedReward === reward.id ? "rgba(255,204,0,.05)" : "transparent",
-                          borderRadius: 2,
+                          borderRadius: 3,
                         }}
                       >
                         <CardActionArea onClick={() => setSelectedReward(reward.id)}>
@@ -303,94 +311,117 @@ export default function MtnPromoApp() {
                       variant="contained"
                       size="large"
                       startIcon={<Bolt />}
-                      onClick={handleStartAds}
+                      onClick={handleProcessActivation}
                       disabled={!selectedReward}
                       sx={{ flex: 2, fontWeight: 700 }}
                     >
-                      Watch Ads to Activate
+                      Activate Reward
                     </Button>
                   </Stack>
                 </Stack>
               </Paper>
             )}
 
-            {/* PAGE 4: SUCCESS / ACTIVATED SCREEN */}
+            {/* PAGE 4: RESULT SCREEN (SUCCESS OR FAILED) */}
             {step === 4 && (
               <Paper
                 elevation={0}
                 sx={{
                   p: { xs: 3, sm: 6 },
                   border: "1px solid rgba(255, 204, 0, 0.2)",
-                  borderRadius: 2,
+                  borderRadius: 4,
                   textAlign: "center",
                 }}
               >
-                <Stack spacing={3} alignItems="center">
-                  <CheckCircleOutlined sx={{ fontSize: 72, color: "#4caf50" }} />
-                  <Typography variant="h4" fontWeight={850}>
-                    Successfully Activated!
-                  </Typography>
-                  <Typography color="text.secondary" sx={{ maxWidth: 420 }}>
-                    Your reward ({selectedReward === "data" ? "20GB Data" : "₦5,000 Airtime"}) has been successfully processed and queued for delivery to <strong>{formData.phone}</strong>.
-                  </Typography>
+                {outcome === "success" ? (
+                  <Stack spacing={3} alignItems="center">
+                    <CheckCircleOutlined sx={{ fontSize: 72, color: "#4caf50" }} />
+                    <Typography variant="h4" fontWeight={850}>
+                      Successfully Activated!
+                    </Typography>
+                    <Typography color="text.secondary" sx={{ maxWidth: 420 }}>
+                      Your reward ({selectedReward === "data" ? "40GB Data" : "₦10,000 Airtime"}) has been successfully processed and queued for delivery to <strong>{formData.phone}</strong>.
+                    </Typography>
 
-                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 2, width: "100%" }}>
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      size="large"
-                      startIcon={<HomeOutlined />}
-                      onClick={resetFlow}
-                      sx={{ fontWeight: 700 }}
-                    >
-                      Back to Main Page
-                    </Button>
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      color="inherit"
-                      size="large"
-                      startIcon={<Replay />}
-                      onClick={resetFlow}
-                    >
-                      Try Again / Claim Another
-                    </Button>
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 2, width: "100%" }}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        startIcon={<HomeOutlined />}
+                        onClick={resetFlow}
+                        sx={{ fontWeight: 700 }}
+                      >
+                        Back to Main Page
+                      </Button>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="inherit"
+                        size="large"
+                        startIcon={<Replay />}
+                        onClick={resetFlow}
+                      >
+                        Claim Another
+                      </Button>
+                    </Stack>
                   </Stack>
-                </Stack>
+                ) : (
+  <Stack spacing={3} alignItems="center">
+    <Error sx={{ fontSize: 72, color: "#f44336" }} />
+    <Typography variant="h4" fontWeight={850}>
+      Activation Failed
+    </Typography>
+    <Typography color="text.secondary" sx={{ maxWidth: 420 }}>
+      We could not verify network line eligibility for <strong>{formData.phone}</strong> at this moment. Please try again or use an alternate line.
+    </Typography>
+
+                    <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 2, width: "100%" }}>
+                      <Button
+                        fullWidth
+                        variant="contained"
+                        size="large"
+                        startIcon={<Replay />}
+                        onClick={() => setStep(3)}
+                        sx={{ fontWeight: 700 }}
+                      >
+                        Try Again
+                      </Button>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="inherit"
+                        size="large"
+                        startIcon={<HomeOutlined />}
+                        onClick={resetFlow}
+                      >
+                        Start Over
+                      </Button>
+                    </Stack>
+                  </Stack>
+                )}
               </Paper>
             )}
           </Stack>
         </Container>
 
-        {/* AD / LOADING MODAL */}
-        <Dialog open={adOpen} fullWidth maxWidth="xs" onClose={() => {}}>
-          <DialogContent sx={{ p: 4, bgcolor: "background.paper", borderRadius: 2 }}>
+        {/* LOADING / PROCESSING MODAL */}
+        <Dialog open={loadingOpen} fullWidth maxWidth="xs" onClose={() => {}}>
+          <DialogContent sx={{ p: 4, bgcolor: "background.paper", borderRadius: 4 }}>
             <Stack spacing={3} alignItems="center" textAlign="center">
-              <Box
-                sx={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: "50%",
-                  bgcolor: "rgba(255,204,0,.15)",
-                  color: "primary.main",
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                <Bolt sx={{ fontSize: 32 }} />
-              </Box>
+              <CircularProgress color="primary" size={56} thickness={4} />
               <Box>
                 <Typography variant="h6" fontWeight={800} gutterBottom>
-                  Loading Advertisement...
+                  Processing Request...
                 </Typography>
                 <Typography color="text.secondary" variant="body2">
-                  Please wait while your ad stream plays and activation is verified ({seconds}s remaining)
+                  Verifying subscriber line and dispatching reward allocation ({seconds}s)
                 </Typography>
               </Box>
               <LinearProgress
                 variant="determinate"
-                value={((5 - seconds) / 5) * 100}
-                sx={{ width: "100%", height: 8, borderRadius: 1 }}
+                value={((3 - seconds) / 3) * 100}
+                sx={{ width: "100%", height: 6, borderRadius: 5 }}
               />
             </Stack>
           </DialogContent>
