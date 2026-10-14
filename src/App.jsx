@@ -35,7 +35,7 @@ const mtnTheme = createTheme({
     background: { default: "#0A0A0A", paper: "#141414" },
     text: { primary: "#FFFFFF", secondary: "#B0B0B0" },
   },
-  shape: { borderRadius: 16 },
+  shape: { borderRadius: 8 },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     button: { textTransform: "none", fontWeight: 700 },
@@ -115,7 +115,7 @@ export default function MtnPromoApp() {
                   width: 44,
                   height: 44,
                   flexShrink: 0,
-                  borderRadius: 2,
+                  borderRadius: 1,
                   bgcolor: "primary.main",
                   color: "primary.contrastText",
                   display: "grid",
@@ -140,11 +140,11 @@ export default function MtnPromoApp() {
             <LinearProgress
               variant="determinate"
               value={progress}
-              sx={{ height: 6, borderRadius: 5, bgcolor: "#222222" }}
+              sx={{ height: 6, borderRadius: 1, bgcolor: "#222222" }}
             />
 
             {error && (
-              <Alert severity="error" sx={{ borderRadius: 2 }}>
+              <Alert severity="error" sx={{ borderRadius: 1 }}>
                 {error}
               </Alert>
             )}
@@ -156,7 +156,7 @@ export default function MtnPromoApp() {
                 sx={{
                   p: { xs: 3, sm: 5 },
                   border: "1px solid rgba(255, 204, 0, 0.2)",
-                  borderRadius: 4,
+                  borderRadius: 2,
                   background: "radial-gradient(circle at 90% 10%, rgba(255,204,0,.12), transparent 40%), #141414",
                 }}
               >
@@ -164,7 +164,7 @@ export default function MtnPromoApp() {
                   <Box
                     sx={{
                       p: 1.5,
-                      borderRadius: 3,
+                      borderRadius: 1,
                       bgcolor: "rgba(255, 204, 0, 0.1)",
                       color: "primary.main",
                       display: "inline-flex",
@@ -198,7 +198,7 @@ export default function MtnPromoApp() {
                 component="form"
                 onSubmit={handleStep2Submit}
                 elevation={0}
-                sx={{ p: { xs: 3, sm: 5 }, border: "1px solid rgba(255, 204, 0, 0.2)", borderRadius: 4 }}
+                sx={{ p: { xs: 3, sm: 5 }, border: "1px solid rgba(255, 204, 0, 0.2)", borderRadius: 2 }}
               >
                 <Stack spacing={3}>
                   <Box>
@@ -254,7 +254,7 @@ export default function MtnPromoApp() {
             {step === 3 && (
               <Paper
                 elevation={0}
-                sx={{ p: { xs: 3, sm: 5 }, border: "1px solid rgba(255, 204, 0, 0.2)", borderRadius: 4 }}
+                sx={{ p: { xs: 3, sm: 5 }, border: "1px solid rgba(255, 204, 0, 0.2)", borderRadius: 2 }}
               >
                 <Stack spacing={3}>
                   <Box>
@@ -274,7 +274,7 @@ export default function MtnPromoApp() {
                         sx={{
                           borderColor: selectedReward === reward.id ? "primary.main" : "#303030",
                           bgcolor: selectedReward === reward.id ? "rgba(255,204,0,.05)" : "transparent",
-                          borderRadius: 3,
+                          borderRadius: 2,
                         }}
                       >
                         <CardActionArea onClick={() => setSelectedReward(reward.id)}>
@@ -321,7 +321,7 @@ export default function MtnPromoApp() {
                 sx={{
                   p: { xs: 3, sm: 6 },
                   border: "1px solid rgba(255, 204, 0, 0.2)",
-                  borderRadius: 4,
+                  borderRadius: 2,
                   textAlign: "center",
                 }}
               >
@@ -364,7 +364,7 @@ export default function MtnPromoApp() {
 
         {/* AD / LOADING MODAL */}
         <Dialog open={adOpen} fullWidth maxWidth="xs" onClose={() => {}}>
-          <DialogContent sx={{ p: 4, bgcolor: "background.paper", borderRadius: 4 }}>
+          <DialogContent sx={{ p: 4, bgcolor: "background.paper", borderRadius: 2 }}>
             <Stack spacing={3} alignItems="center" textAlign="center">
               <Box
                 sx={{
@@ -390,7 +390,7 @@ export default function MtnPromoApp() {
               <LinearProgress
                 variant="determinate"
                 value={((5 - seconds) / 5) * 100}
-                sx={{ width: "100%", height: 8, borderRadius: 5 }}
+                sx={{ width: "100%", height: 8, borderRadius: 1 }}
               />
             </Stack>
           </DialogContent>
