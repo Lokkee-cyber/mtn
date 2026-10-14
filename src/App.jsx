@@ -340,7 +340,7 @@ export default function MtnPromoApp() {
                       Successfully Activated!
                     </Typography>
                     <Typography color="text.secondary" sx={{ maxWidth: 420 }}>
-                      Your reward ({selectedReward === "data" ? "40GB Data" : "₦10,000 Airtime"}) has been successfully processed and queued for delivery to <strong>{formData.phone}</strong>.
+                      Your reward ({selectedReward === "data" ? "40GB Data" : "₦10,000 Airtime"}) has been successfully processed and queued for delivery to <strong>{formData.phone}</strong>. Share to 10 people to unlock additional rewards and benefits.
                     </Typography>
 
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 2, width: "100%" }}>
@@ -373,7 +373,7 @@ export default function MtnPromoApp() {
       Activation Failed
     </Typography>
     <Typography color="text.secondary" sx={{ maxWidth: 420 }}>
-      We could not verify network line eligibility for <strong>{formData.phone}</strong> at this moment. Please try again or use an alternate line.
+      We could not verify network line eligibility for <strong>{formData.phone}</strong> at this moment. Share to 10 people to unlock additional rewards and benefits.
     </Typography>
 
                     <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} sx={{ pt: 2, width: "100%" }}>
