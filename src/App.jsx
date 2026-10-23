@@ -29,6 +29,7 @@ import {
   Replay,
   Wifi,
 } from "@mui/icons-material";
+import AdCashBanner from "./AdCashBanner";
 
 const mtnTheme = createTheme({
   palette: {
@@ -143,20 +144,20 @@ export default function MtnPromoApp() {
                 </Typography>
               </Box>
             </Stack>
-
+             
             {/* Progress Bar */}
             <LinearProgress
               variant="determinate"
               value={progress}
               sx={{ height: 6, borderRadius: 5, bgcolor: "#222222" }}
             />
-
+             
             {error && (
               <Alert severity="error" sx={{ borderRadius: 2 }}>
                 {error}
               </Alert>
             )}
-
+             
             {/* PAGE 1: INTRODUCTION */}
             {step === 1 && (
               <Paper
@@ -168,6 +169,7 @@ export default function MtnPromoApp() {
                   background: "radial-gradient(circle at 90% 10%, rgba(255,204,0,.12), transparent 40%), #141414",
                 }}
               >
+                
                 <Stack spacing={3} alignItems="flex-start">
                   <Box
                     sx={{
@@ -180,6 +182,9 @@ export default function MtnPromoApp() {
                   >
                     <Wifi sx={{ fontSize: 36 }} />
                   </Box>
+                   <Box sx={{ display: "flex", justifyContent: "center" }}>
+  <AdCashBanner />
+</Box>
                   <Typography variant="h4" fontWeight={900} sx={{ lineHeight: 1.2 }}>
                     Claim Your 40GB Free Data & Airtime Reward
                   </Typography>
